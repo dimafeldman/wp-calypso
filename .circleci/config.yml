@@ -26,7 +26,17 @@ jobs:
             mkdir -p $CIRCLE_ARTIFACTS
             mkdir -p $CIRCLE_TEST_REPORTS
 
+      - restore_cache:
+          name: "Restoring npm cache"
+          key: v1-{{ checksum ".nvmrc" }}-npmcache
+
       - run: npm ci
+
+      - save_cache:
+          name: "Saving npm cache"
+          key: v1-{{ checksum ".nvmrc" }}-npmcache
+          paths:
+            - ~/.npm
 
       - run: NODE_ENV=test npm run build-server
 
