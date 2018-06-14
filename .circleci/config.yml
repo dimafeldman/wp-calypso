@@ -28,7 +28,17 @@ jobs:
 
       - run: npm ci
 
+      - restore_cache:
+          name: Restoring server build babel cache
+          key: v1-server-babel-
+
       - run: NODE_ENV=test npm run build-server
+
+      - save_cache:
+          name: Saving server build babel cache
+          key: v1-server-babel-{{ epoch }}
+          paths:
+            - "build/.babel-server-cache"
 
       - run:
           command: |
